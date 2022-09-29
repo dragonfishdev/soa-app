@@ -9,9 +9,7 @@ const sequelize = new Sequelize({
   storage: './database.sqlite',
 });
 
-const model = sequelize.define(UserSchema.modelName, UserSchema.model);
-
-db[model.name] = model;
+db.User = sequelize.define(UserSchema.modelName, UserSchema.model);
 
 db.sequelize = sequelize;
 

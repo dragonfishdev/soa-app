@@ -2,13 +2,13 @@ module.exports = {
   env: {
     commonjs: true,
     es2021: true,
-    node: true
+    node: true,
   },
   extends: 'standard',
   overrides: [
   ],
   parserOptions: {
-    ecmaVersion: 'latest'
+    ecmaVersion: 'latest',
   },
   rules: {
     // enable additional rules
@@ -24,8 +24,9 @@ module.exports = {
     'space-before-function-paren': ['error', {
       anonymous: 'ignore',
       named: 'never',
-      asyncArrow: 'always'
+      asyncArrow: 'always',
     }],
+    'comma-dangle': ['error', 'always-multiline'],
 
     // disable rules from base configurations
     'for-direction': 'off',
@@ -36,8 +37,8 @@ module.exports = {
         ignoreComments: false,
         ignoreRegExpLiterals: true,
         ignoreStrings: true,
-        ignoreTemplateLiterals: true
-      }
-    ]
-  }
+        ignoreTemplateLiterals: true,
+      },
+    ],
+  },
 };

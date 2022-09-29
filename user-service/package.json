@@ -1,0 +1,32 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "Handles user registration and authorization",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "server": "nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sabitov Karim",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize": "^6.23.2",
+    "sqlite3": "^5.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^7.4.0",
+    "eslint": "^8.24.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.3.0",
+    "eslint-plugin-promise": "^6.0.1",
+    "nodemon": "^2.0.20"
+  }
+}

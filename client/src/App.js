@@ -1,12 +1,17 @@
-import { LoginPage } from "./pages/LoginPage";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useRoutes } from "./routes";
 
 import 'materialize-css';
 
 function App() {
+  const routes = useRoutes();
+
   return (
-    <div className="container">
-      <LoginPage />
-    </div>
+    <Router>
+      <div className="container">
+        { routes }
+      </div>
+    </Router>
   )
 }
 

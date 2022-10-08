@@ -1,6 +1,8 @@
 import { useState } from "react"
 
-export const useSidepanel = (open = false) => {
+function noop() {}
+
+export const useSidepanel = ({ open = false, onClose = noop  }) => {
   const [isOpen, setIsOpen] = useState(open);
 
   const handleOpen = () => {
@@ -8,6 +10,7 @@ export const useSidepanel = (open = false) => {
   }
 
   const handleClose = () => {
+    onClose();
     setIsOpen(false)
   }
 

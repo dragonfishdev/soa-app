@@ -34,6 +34,14 @@ export const UserForm = ({ user, onSuccess = () => {} }) => {
     } catch (e) {}
   }
 
+  const updateHandler = async () => {
+    try {
+      const data = await request(`/api/users/${user.id}`, 'POST', {...form})
+      message(data.message)
+      onSuccess();
+    } catch (e) {}
+  }
+
   return <>
     <div
       style={{ fontSize: '19pt', textAlign: "center" }}
@@ -78,6 +86,7 @@ export const UserForm = ({ user, onSuccess = () => {} }) => {
         <button 
           className="btn yellow darken-4" 
           style={{marginRight: 10}}
+          onClick={updateHandler}
           disabled={loading}
           >Изменить
         </button> }

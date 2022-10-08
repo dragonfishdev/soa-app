@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
+import { AuthContext } from "../context/AuthContext";
 
 export const UserForm = ({ user, onSuccess = () => {} }) => {
+  const { token } = useContext(AuthContext)
   const {loading, request, error, clearError} = useHttp();
   const message = useMessage()
   const [form, setForm] = useState({
@@ -36,7 +38,9 @@ export const UserForm = ({ user, onSuccess = () => {} }) => {
 
   const updateHandler = async () => {
     try {
-      const data = await request(`/api/users/${user.id}`, 'POST', {...form})
+      const data = await request(`/api/users/${user.id}`, 'POST', {...form}, {
+        Authorization: `Bearer ${token}`
+      })
       message(data.message)
       onSuccess();
     } catch (e) {}

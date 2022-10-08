@@ -44,7 +44,7 @@ export const UsersPage = () => {
                 <i className="material-icons">pause {/*play_arrow*/}</i>
               </button>
               <button className="btn-small blue darken-1" style={buttonsStyle} onClick={() => {
-                setUser({ username: "karim", email: "karim@foo.bar" })
+                setUser({ userName: "karim", email: "karim@foo.bar" })
                 sidepanelProps.handleOpen()
               }}>
                 <i className="material-icons">edit</i>
@@ -55,7 +55,7 @@ export const UsersPage = () => {
       </table>
     </div>
     <Sidepanel {...sidepanelProps}>
-      <UserForm user={user}/>
+      <UserForm user={user} onSuccess={sidepanelProps.handleClose}/>
     </Sidepanel>
   </>
 }

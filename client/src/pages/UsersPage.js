@@ -1,4 +1,5 @@
 import { Sidepanel } from "../components/Sidepanel"
+import { UserForm } from "../components/UserForm"
 import { useSidepanel } from "../hooks/sidepanel.hook"
 
 export const UsersPage = () => {
@@ -42,7 +43,7 @@ export const UsersPage = () => {
       </table>
     </div>
     <Sidepanel {...sidepanelProps}>
-      <h5>Новый пользователь</h5>
+      <UserForm />
     </Sidepanel>
   </>
 }

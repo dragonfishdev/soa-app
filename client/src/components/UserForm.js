@@ -1,15 +1,26 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export const UserForm = ({ user }) => {
+  const [form, setForm] = useState({
+    username: "", email: ""
+  });
 
   useEffect(() => {
     window.M.updateTextFields();
   }, []);
 
+  useEffect(() => {
+    setForm({ username: user?.username || "", email: user?.email || "" })
+  }, [user])
+
+  const changeHandler = (event) => {
+    setForm({ ...form, [event.target.name]: event.target.value })
+  }
+
   return <>
     <div
       style={{ fontSize: '19pt', textAlign: "center" }}
-    >{ user ? `Изменить: ${user.username}` : "Новый пользователь" }</div>
+    >{user ? "Изменить" : "Новый пользователь"}</div>
     <div className="card blue darken-1">
       <div className="card-content white-text">
 
@@ -20,6 +31,8 @@ export const UserForm = ({ user }) => {
             type="text"
             name="username"
             className="yellow-input white-text"
+            value={form.username}
+            onChange={changeHandler}
           />
           <label htmlFor="username">Имя пользователя</label>
         </div>
@@ -31,6 +44,8 @@ export const UserForm = ({ user }) => {
             type="email"
             name="email"
             className="yellow-input white-text"
+            value={form.email}
+            onChange={changeHandler}
           />
           <label htmlFor="email">Email</label>
         </div>
@@ -40,7 +55,7 @@ export const UserForm = ({ user }) => {
           className="btn yellow darken-4" 
           style={{marginRight: 10}}
           >
-            Регистрация
+            {!user ? "Регистрация" : "Изменить"}
         </button>
       </div>
     </div>

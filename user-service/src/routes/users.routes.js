@@ -1,9 +1,10 @@
 const { Router } = require('express');
+const auth = require('../middleware/auth.middleware');
 const { User } = require('../models');
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const users = await User.findAll({ attributes: ['id', 'userName', 'email'] });
     return res.json(users);
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', auth, async (req, res) => {
   try {
     const id = req.params.id;
 

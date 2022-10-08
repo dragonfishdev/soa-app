@@ -69,7 +69,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.status(400).json({ message: 'Пользователь не найден' });
       }
@@ -87,6 +87,7 @@ router.post(
 
       res.json({ token, userId: user.id });
     } catch (e) {
+      console.error(e);
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
     }
   },

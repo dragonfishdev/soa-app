@@ -63,10 +63,10 @@ export const UsersPage = () => {
 
         <tbody>
           { users.map((user) => (
-            <tr>
+            <tr key={`user#${user.id}`}>
               <td>{user.userName}</td>
               <td>{user.email}</td>
-              <td><i className="material-icons">{user.active ? "check_box" : "check_box_outline_blank"}</i></td>
+              <td><i className="material-icons">{user.active ? "check" : "cancel"}</i></td>
               <td>
                 <span className="new badge blue" data-badge-caption={user.role} />
               </td>

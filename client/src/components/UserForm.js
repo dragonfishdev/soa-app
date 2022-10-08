@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import { useHttp } from "../hooks/http.hook";
 import { useMessage } from "../hooks/message.hook";
+import { AuthContext } from "../context/AuthContext";
 
 export const UserForm = ({ user, onSuccess = () => {} }) => {
+  const { token } = useContext(AuthContext)
   const {loading, request, error, clearError} = useHttp();
   const message = useMessage()
   const [form, setForm] = useState({
@@ -29,6 +31,16 @@ export const UserForm = ({ user, onSuccess = () => {} }) => {
   const registerHandler = async () => {
     try {
       const data = await request('/api/auth/register', 'POST', {...form})
+      message(data.message)
+      onSuccess();
+    } catch (e) {}
+  }
+
+  const updateHandler = async () => {
+    try {
+      const data = await request(`/api/users/${user.id}`, 'POST', {...form}, {
+        Authorization: `Bearer ${token}`
+      })
       message(data.message)
       onSuccess();
     } catch (e) {}
@@ -78,6 +90,7 @@ export const UserForm = ({ user, onSuccess = () => {} }) => {
         <button 
           className="btn yellow darken-4" 
           style={{marginRight: 10}}
+          onClick={updateHandler}
           disabled={loading}
           >Изменить
         </button> }

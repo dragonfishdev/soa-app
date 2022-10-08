@@ -12,9 +12,8 @@ const router = Router();
 router.post(
   '/register',
   [
-    check('email').isEmail(),
-    check('password', 'Минимальная длина пароля 6 символов').isLength({ min: 6 }),
     check('userName', 'Имя пользователя не должно быть пустым').not().isEmpty(),
+    check('email').isEmail(),
   ],
   async (req, res) => {
     try {
@@ -26,7 +25,7 @@ router.post(
         });
       }
 
-      const { userName, email, password } = req.body;
+      const { userName, email } = req.body;
 
       const candidate = await User.findOne({
         where: {
@@ -39,6 +38,8 @@ router.post(
       if (candidate) {
         return res.status(400).json({ message: 'Пользователь уже существует' });
       };
+
+      const password = 'test';
 
       const hashedPassword = await bcrypt.hash(password, 12);
       await User.create({ userName, email, password: hashedPassword });
@@ -54,7 +55,7 @@ router.post(
 router.post(
   '/login',
   [
-    check('email', 'Неверный логин').normalizeEmail().isEmail(),
+    check('email', 'Неверный логин').isEmail(),
     check('password', 'Введите пароль').exists(),
   ],
   async (req, res) => {
@@ -69,7 +70,7 @@ router.post(
 
       const { email, password } = req.body;
 
-      const user = await User.findOne({ email });
+      const user = await User.findOne({ where: { email } });
       if (!user) {
         return res.status(400).json({ message: 'Пользователь не найден' });
       }
@@ -87,6 +88,7 @@ router.post(
 
       res.json({ token, userId: user.id });
     } catch (e) {
+      console.error(e);
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
     }
   },

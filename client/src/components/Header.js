@@ -15,12 +15,12 @@ export const Header = () => {
   return (
     <nav>
       <div className="nav-wrapper blue darken-1" style={{ padding: '0 2rem' }}>
-        <span className="brand-logo">MyTasks</span>
+        <NavLink to="/"><span className="brand-logo">MyTasks</span></NavLink>
         <ul id="nav-mobile" className="right hide-on-med-and-down">
           <li><NavLink to="/">Задачи</NavLink></li>
           <li><NavLink to="/users">Пользователи</NavLink></li>
           <li><NavLink to="/archive">Архив</NavLink></li>
-          <li><NavLink to="/" onClick={logoutHandler}>Выйти</NavLink></li>
+          <li><a href="/" onClick={logoutHandler}>Выйти</a></li>
         </ul>
       </div>
     </nav>

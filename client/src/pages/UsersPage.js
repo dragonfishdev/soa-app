@@ -66,14 +66,13 @@ export const UsersPage = () => {
             <tr>
               <td>{user.userName}</td>
               <td>{user.email}</td>
-              <td><i className="material-icons">check_box</i></td>
+              <td><i className="material-icons">{user.active ? "check_box" : "check_box_outline_blank"}</i></td>
               <td>
-                <span className="new badge blue" data-badge-caption="Admin" />
-                <span className="new badge blue" data-badge-caption="User" />
+                <span className="new badge blue" data-badge-caption={user.role} />
               </td>
               <td>
                 <button className="btn-small blue darken-1" style={buttonsStyle}>
-                  <i className="material-icons">pause {/*play_arrow*/}</i>
+                  <i className="material-icons">{user.active ? "pause" : "play_arrow"}</i>
                 </button>
                 <button className="btn-small blue darken-1" style={buttonsStyle} onClick={() => {
                   setUser(user)

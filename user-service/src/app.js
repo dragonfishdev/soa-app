@@ -19,7 +19,7 @@ async function start() {
 
     const admin = await models.User.findOne({ where: { userName: 'admin' } });
     if (!admin) {
-      models.User.create({ userName: 'admin', email: 'sabitovka@shkd.bizml.ru', password: await bcrypt.hash('admin', 12) });
+      models.User.create({ userName: 'admin', email: 'sabitovka@shkd.bizml.ru', password: await bcrypt.hash('admin', 12), role: 'admin' });
     }
 
     app.listen(5000, () => console.log(`App has been started on ${PORT}...`));

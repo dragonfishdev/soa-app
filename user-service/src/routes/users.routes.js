@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', auth, async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'userName', 'email'] });
+    const users = await User.findAll({ attributes: ['id', 'userName', 'email', 'active', 'role'] });
     return res.json(users);
   } catch (e) {
     console.error(e);

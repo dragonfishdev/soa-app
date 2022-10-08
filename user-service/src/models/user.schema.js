@@ -14,4 +14,11 @@ module.exports = Schema('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
+  },
+  role: {
+    type: DataTypes.ENUM('admin', 'user'),
+  },
 });

@@ -80,12 +80,14 @@ router.post(
         return res.status(400).json({ message: 'Неверный пароль, попробуйте снова' });
       }
 
+      const { id, userName, role } = user;
+
       const token = jwt.sign(
-        { userId: user.id, userRole: user.role },
+        { user: { id, userName, role } },
         process.env.JWT_SECRET,
       );
 
-      res.json({ token, userId: user.id, userRole: user.role });
+      res.json({ token, user: { id, userName, role } });
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });

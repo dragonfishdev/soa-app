@@ -6,8 +6,7 @@ function permit(roles = []) {
     if (req.method === 'OPTIONS') {
       return next();
     }
-    console.log(roles.includes(req.user.role), roles, req.user.userRole);
-    if (roles.length && !roles.includes(req.user.userRole)) {
+    if (roles.length && !roles.includes(req.user.role)) {
       return res.status(403).json({ message: 'Нет доступа' });
     }
     next();

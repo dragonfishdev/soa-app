@@ -81,11 +81,11 @@ router.post(
       }
 
       const token = jwt.sign(
-        { userId: user.id },
+        { userId: user.id, userRole: user.role },
         process.env.JWT_SECRET,
       );
 
-      res.json({ token, userId: user.id });
+      res.json({ token, userId: user.id, userRole: user.role });
     } catch (e) {
       console.error(e);
       res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });

@@ -20,5 +20,6 @@ module.exports = Schema('User', {
   },
   role: {
     type: DataTypes.ENUM('admin', 'user'),
+    defaultValue: 'user',
   },
 });

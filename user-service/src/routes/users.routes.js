@@ -1,10 +1,11 @@
 const { Router } = require('express');
 const auth = require('../middleware/auth.middleware');
+const permit = require('../middleware/role.middleware');
 const { User } = require('../models');
 
 const router = Router();
 
-router.get('/', auth, async (req, res) => {
+router.get('/', auth, permit('admin'), async (req, res) => {
   try {
     const users = await User.findAll({ attributes: ['id', 'userName', 'email', 'active', 'role'] });
     return res.json(users);
@@ -14,7 +15,7 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
-router.post('/:id', auth, async (req, res) => {
+router.post('/:id', auth, permit('admin'), async (req, res) => {
   try {
     const id = req.params.id;
 

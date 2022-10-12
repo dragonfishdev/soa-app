@@ -5,21 +5,21 @@ const storageName = 'userData'
 export const useAuth = () => {
   const [token, setToken] = useState(null)
   const [ready, setReady] = useState(false)
-  const [userId, setUserId] = useState(null)
+  const [user, setUser] = useState(null)
 
-  const login = useCallback((jwtToken, id) => {
+  const login = useCallback((jwtToken, user) => {
     setToken(jwtToken)
-    setUserId(id)
+    setUser(user)
 
     localStorage.setItem(storageName, JSON.stringify({
-      userId: id, token: jwtToken
+      user, token: jwtToken
     }))
   }, [])
 
 
   const logout = useCallback(() => {
     setToken(null)
-    setUserId(null)
+    setUser(null)
     localStorage.removeItem(storageName)
   }, [])
 
@@ -33,5 +33,5 @@ export const useAuth = () => {
   }, [login])
 
 
-  return { login, logout, token, userId, ready }
+  return { login, logout, token, user, ready }
 }

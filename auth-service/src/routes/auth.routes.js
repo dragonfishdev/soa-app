@@ -1,11 +1,8 @@
 const { Router } = require('express');
 const { check, validationResult } = require('express-validator');
-const { Op } = require('sequelize');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-const { User } = require('../models');
 
 const router = Router();
 
@@ -24,9 +21,9 @@ router.post(
           message: 'Некорректные данные при регистрации',
         });
       }
-
+  
       const { userName, email } = req.body;
-
+  
       const candidate = await User.findOne({
         where: {
           [Op.or]: {
@@ -40,16 +37,16 @@ router.post(
       };
 
       const password = 'test';
-
+ 
       const hashedPassword = await bcrypt.hash(password, 12);
       await User.create({ userName, email, password: hashedPassword });
-
-      res.status(201).json({ message: 'Пользователь создан' });
+  
+      return res.status(201).json({ message: 'Пользователь создан' });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Что-то пошло не так' });
     }
-  },
+  }  
 );
 
 router.post(
@@ -58,41 +55,7 @@ router.post(
     check('email', 'Неверный логин').isEmail(),
     check('password', 'Введите пароль').exists(),
   ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          errors: errors.array(),
-          message: 'Некорректные данные при входе в систему',
-        });
-      }
-
-      const { email, password } = req.body;
-
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        return res.status(400).json({ message: 'Пользователь не найден' });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: 'Неверный пароль, попробуйте снова' });
-      }
-
-      const { id, userName, role } = user;
-
-      const token = jwt.sign(
-        { user: { id, userName, role } },
-        process.env.JWT_SECRET,
-      );
-
-      res.json({ token, user: { id, userName, role } });
-    } catch (e) {
-      console.error(e);
-      res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
-    }
-  },
+  require('../controllers/login.controller'),
 );
 
 module.exports = router;

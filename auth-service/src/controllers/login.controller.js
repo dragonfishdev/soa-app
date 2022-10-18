@@ -1,5 +1,10 @@
 const { validationResult } = require('express-validator');
-const { Op } = require('sequelize');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { Cred } = require('../models');
+
+// eslint-disable-next-line no-shadow
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 module.exports = async (req, res) => {
   try {
@@ -11,28 +16,40 @@ module.exports = async (req, res) => {
       });
     }
 
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ message: 'Пользователь не найден' });
+    const userRes = await fetch(`http://localhost:5001/api/users/${username}`);
+    if (userRes.status === 404) {
+      return res.status(404).json({ message: 'Неверный логин или пароль' });
     }
 
+    const { authId } = await userRes.json();
+    const user = await Cred.findOne({ where: { authId } });
+    if (!user) {
+      // TODO: Прикрутить возможность восстановления пароля
+      return res.status(500).json({ message: 'Не удалось найти учетные данные авторизации' });
+    }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Неверный пароль, попробуйте снова' });
+      return res.status(400).json({ message: 'Неверный логин или пароль' });
     }
 
-    const { id, userName, role } = user;
+    const { id, role } = user;
+
+    const key = process.env.PRIVATE_KEY;
 
     const token = jwt.sign(
-      { user: { id, userName, role } },
-      process.env.JWT_SECRET,
+      { id, role },
+      key,
+      {
+        expiresIn: '5m',
+        algorithm: 'RS256',
+      },
     );
 
-    res.json({ token, user: { id, userName, role } });
+    return res.json({ token });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+    return res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
   }
 };

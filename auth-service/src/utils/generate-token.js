@@ -18,7 +18,6 @@ async function generateToken(user) {
       process.env.REFRESH_TOKEN_PRIVATE_KEY,
       {
         expiresIn: '30d',
-        algorithm: 'RS256',
       },
     );
 

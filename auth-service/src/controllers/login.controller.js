@@ -1,10 +1,8 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { Cred } = require('../models');
+const { UserService } = require('../api-services');
 const generateToken = require('../utils/generate-token');
-
-// eslint-disable-next-line no-shadow
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 module.exports = async (req, res) => {
   try {
@@ -18,12 +16,12 @@ module.exports = async (req, res) => {
 
     const { username, password } = req.body;
 
-    const userRes = await fetch(`http://localhost:5001/api/users/${username}`);
+    const userRes = await UserService.request(`/api/users/${username}`);
     if (userRes.status === 404) {
       return res.status(404).json({ message: 'Неверный логин или пароль' });
     }
 
-    const { authId } = await userRes.json();
+    const { authId } = userRes.data;
     const user = await Cred.findOne({ where: { authId } });
     if (!user) {
       // TODO: Прикрутить возможность восстановления пароля

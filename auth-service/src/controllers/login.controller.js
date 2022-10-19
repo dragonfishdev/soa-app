@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const { Cred } = require('../models');
+const generateToken = require('../utils/generate-token');
 
 // eslint-disable-next-line no-shadow
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -34,20 +34,8 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: 'Неверный логин или пароль' });
     }
 
-    const { id, role } = user;
-
-    const key = process.env.PRIVATE_KEY;
-
-    const token = jwt.sign(
-      { id, role },
-      key,
-      {
-        expiresIn: '5m',
-        algorithm: 'RS256',
-      },
-    );
-
-    return res.json({ token });
+    const { accessToken, refreshToken } = await generateToken(user);
+    return res.json({ accessToken, refreshToken });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });

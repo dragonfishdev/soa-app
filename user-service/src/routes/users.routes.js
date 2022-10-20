@@ -8,7 +8,7 @@ const router = Router();
 
 router.get('/', auth, permit('admin'), async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'userName', 'email', 'active', 'role'] });
+    const users = await User.findAll();
     return res.json(users);
   } catch (e) {
     console.error(e);
@@ -16,7 +16,13 @@ router.get('/', auth, permit('admin'), async (req, res) => {
   }
 });
 
-// Возможная дыра в API
+router.post(
+  '/',
+  // permit('admin'),
+  require('../controllers/create-user.controller'),
+);
+
+// FIXME: Возможная дыра в API
 router.get('/:usernameOrId', async (req, res) => {
   try {
     const usernameOrId = req.params.usernameOrId;
@@ -27,7 +33,7 @@ router.get('/:usernameOrId', async (req, res) => {
           username: usernameOrId,
         },
       },
-      attributes: ['authId'],
+      attributes: ['authId', 'email'],
     });
 
     if (!candidate) {

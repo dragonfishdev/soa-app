@@ -6,21 +6,21 @@ const { User } = require('../models');
 
 const router = Router();
 
-router.get('/', auth, permit('admin'), async (req, res) => {
-  try {
-    const users = await User.findAll();
-    return res.json(users);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
-  }
-});
-
-router.post(
-  '/',
-  // permit('admin'),
-  require('../controllers/create-user.controller'),
-);
+router
+  .get('/', auth, permit('admin'),
+    async (req, res) => {
+      try {
+        const users = await User.findAll();
+        return res.json(users);
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+      }
+    })
+  .post('/', // permit('admin'),
+    require('../controllers/users.create-user.controller'),
+  )
+  .get('/search', require('../controllers/users.search.controller'));
 
 // FIXME: Возможная дыра в API
 router.get('/:usernameOrId', async (req, res) => {

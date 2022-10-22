@@ -1,13 +1,27 @@
 const jwt = require('jsonwebtoken');
 const { UserToken } = require('../models');
 
-async function verifyRefreshToken(token) {
+function verifyRefreshToken(token) {
   const privateKey = process.env.REFRESH_TOKEN_PRIVATE_KEY;
-  const { refreshToken } = await UserToken.findOne({ refreshToken: token });
-  if (!refreshToken) {
-    return null;
-  }
-  return jwt.verify(token, privateKey);
+  return new Promise((resolve, reject) => {
+    UserToken.findOne({ where: { refreshToken: token } })
+      .then((userToken) => {
+        if (!userToken) {
+          return reject(new Error('Invalid refresh token'));
+        }
+
+        return jwt.verify(
+          token,
+          privateKey,
+          (err, tokenDetails) => {
+            if (err) {
+              return reject(new Error(err.message));
+            }
+            return resolve({ tokenDetails });
+          },
+        );
+      });
+  });
 }
 
 module.exports = verifyRefreshToken;

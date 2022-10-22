@@ -1,8 +1,8 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const { Cred } = require('../models');
+const { Credential } = require('../models');
 const { UserService } = require('../api-services');
-const generateToken = require('../utils/generate-token');
+const generateToken = require('../utils/generate-tokens');
 
 module.exports = async (req, res) => {
   try {
@@ -16,13 +16,13 @@ module.exports = async (req, res) => {
 
     const { username, password } = req.body;
 
-    const userRes = await UserService.request(`/api/users/${username}`);
+    const userRes = await UserService.request(`/api/users/search?username=${username}`);
     if (userRes.status === 404) {
-      return res.status(404).json({ message: 'Неверный логин или пароль' });
+      return res.status(400).json({ message: 'Неверный логин или пароль' });
     }
 
-    const { authId } = userRes.data;
-    const user = await Cred.findOne({ where: { authId } });
+    const { id } = userRes.data;
+    const user = await Credential.findOne({ where: { userId: id } });
     if (!user) {
       // TODO: Прикрутить возможность восстановления пароля
       return res.status(500).json({ message: 'Не удалось найти учетные данные авторизации' });

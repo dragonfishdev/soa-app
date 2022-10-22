@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = {
-  name: 'user',
+  name: 'users',
   schema: {
     username: {
       type: DataTypes.STRING,
@@ -15,12 +15,6 @@ module.exports = {
     },
     fullname: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    authId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'auth_id',
     },
   },
 };

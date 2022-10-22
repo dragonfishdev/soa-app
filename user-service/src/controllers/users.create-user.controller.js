@@ -15,7 +15,7 @@ async function createUser(req, res) {
     }
 
     const users = await User.create({ username, email, fullname });
-    return res.json(users);
+    return res.status(201).json(users);
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });

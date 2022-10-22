@@ -1,12 +1,11 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = {
-  name: 'creds',
+  name: 'credentials',
   schema: {
-    authId: {
+    userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: 'authIdIndex',
+      primaryKey: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -14,8 +13,11 @@ module.exports = {
     },
     role: {
       type: DataTypes.ENUM('ADMIN', 'USER'),
-      allowNull: false,
       default: 'USER',
+    },
+    requsetChange: {
+      type: DataTypes.BOOLEAN,
+      default: '1',
     },
   },
 };

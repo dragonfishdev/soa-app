@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { UserService } = require('../api-services');
-const { Cred } = require('../models');
+const { Credential } = require('../models');
 
 module.exports = async (req, res) => {
   try {
@@ -25,11 +25,19 @@ module.exports = async (req, res) => {
     if (status === 400) {
       return res.status(400).json({ message: 'Пользователь уже существует' });
     }
+    if (status !== 201) {
+      throw new Error('Не удалось создать пользователя. Вероятно, произошла ошибка в сервисе пользователей');
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    await Cred.create({ authId: data.authId, password: hashedPassword });
+    await Credential.create({ userId: data.id, password: hashedPassword });
 
-    return res.status(201).json({ message: 'Пользователь создан' });
+    return res.status(201).json({
+      message: 'Пользователь создан',
+      user: {
+        id: data.userId, username, email, fullname,
+      },
+    });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ message: 'Что-то пошло не так' });

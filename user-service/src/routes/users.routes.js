@@ -1,14 +1,46 @@
 const { Router } = require('express');
+const { Op } = require('sequelize');
 const auth = require('../middleware/auth.middleware');
 const permit = require('../middleware/role.middleware');
 const { User } = require('../models');
 
 const router = Router();
 
-router.get('/', auth, permit('admin'), async (req, res) => {
+router
+  .get('/', auth, permit('admin'),
+    async (req, res) => {
+      try {
+        const users = await User.findAll();
+        return res.json(users);
+      } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+      }
+    })
+  .post('/', // permit('admin'),
+    require('../controllers/users.create-user.controller'),
+  )
+  .get('/search', require('../controllers/users.search.controller'));
+
+// FIXME: Возможная дыра в API
+router.get('/:usernameOrId', async (req, res) => {
   try {
-    const users = await User.findAll({ attributes: ['id', 'userName', 'email', 'active', 'role'] });
-    return res.json(users);
+    const usernameOrId = req.params.usernameOrId;
+    const candidate = await User.findOne({
+      where: {
+        [Op.or]: {
+          id: usernameOrId,
+          username: usernameOrId,
+        },
+      },
+      attributes: ['authId', 'email'],
+    });
+
+    if (!candidate) {
+      return res.status(404).json({ message: 'Пользователь не найден' });
+    };
+
+    return res.status(200).json(candidate);
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });

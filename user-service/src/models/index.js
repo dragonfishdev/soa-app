@@ -1,15 +1,12 @@
-const UserSchema = require('./user.schema.js');
-
 const { Sequelize } = require('sequelize');
+const UserSchema = require('./user.schema.js');
+require('dotenv').config();
 
 const db = {};
 
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite',
-});
+const sequelize = new Sequelize(process.env.MYSQL_URI, {});
 
-db.User = sequelize.define(UserSchema.modelName, UserSchema.model);
+db.User = sequelize.define(UserSchema.name, UserSchema.schema);
 
 db.sequelize = sequelize;
 

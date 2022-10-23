@@ -1,0 +1,9 @@
+[
+  {
+    "name": "auth",
+    "host": "localhost",
+    "port": 5000,
+    "protocol": "http",
+    "rootPath": "api/auth"
+  }
+]

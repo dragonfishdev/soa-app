@@ -10,6 +10,7 @@ module.exports = function restreamer(options = {}) {
       if (req.headers['content-length'] !== undefined) {
         req.headers['content-length'] = Buffer.byteLength(opt.stringify(req[opt.property]), 'utf8');
       }
+      console.log(req.headers);
 
       process.nextTick(() => {
         if (req[opt.property]) {

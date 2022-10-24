@@ -25,7 +25,7 @@ services.forEach((service) => {
   let middleware = [];
   if (service.middleware) {
     // eslint-disable-next-line import/no-dynamic-require, global-require
-    middleware = service.middleware.map((filename) => require(`./middleware/${filename}`));
+    middleware = service.middleware.map((mw) => require(`./middleware/${mw}.middleware`));
   }
 
   // need to restream the request so that it can be proxied

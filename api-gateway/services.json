@@ -5,5 +5,15 @@
     "port": 5000,
     "protocol": "http",
     "rootPath": "api/auth"
+  },
+  {
+    "name": "users",
+    "host": "localhost",
+    "port": 5001,
+    "protocol": "http",
+    "rootPath": "api/users",
+    "middleware": [
+      "check-token"
+    ]
   }
 ]

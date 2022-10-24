@@ -1,4 +1,4 @@
-const auth = require('./auth.middleware');
+const auth = require('./user.middleware');
 
 function permit(roles = []) {
   if (typeof roles === 'string') {

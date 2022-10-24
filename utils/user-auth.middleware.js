@@ -1,6 +1,4 @@
-require('dotenv').config();
-
-function queryUser(req, res, next) {
+function userAuth(req, res, next) {
   if (req.method === 'OPTIONS') {
     return next();
   }
@@ -19,4 +17,4 @@ function queryUser(req, res, next) {
   }
 }
 
-module.exports = queryUser;
+module.exports = userAuth;

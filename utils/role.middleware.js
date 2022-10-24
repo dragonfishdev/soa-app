@@ -1,4 +1,4 @@
-const auth = require('./user.middleware');
+const userAuth = require('./user-auth.middleware');
 
 function permit(roles = []) {
   if (typeof roles === 'string') {
@@ -6,12 +6,12 @@ function permit(roles = []) {
     roles = [roles];
   }
   return [
-    auth,
+    userAuth,
     (req, res, next) => {
       if (req.method === 'OPTIONS') {
         return next();
       }
-      if (roles.length && !roles.includes(req.user.role)) {
+      if (roles.length && !roles.some((role) => role.toUpperCase() === req.user.role)) {
         return res.status(403).json({ message: 'Нет доступа' });
       }
       return next();

@@ -1,16 +1,14 @@
 const { Router } = require('express');
 const { Op } = require('sequelize');
-const auth = require('../middleware/user.middleware');
-const permit = require('../middleware/role.middleware');
 const { User } = require('../models');
+const { permit } = require('../../../utils');
 
 const router = Router();
 
 router
-  .get('/', auth, // permit('admin'),
+  .get('/', permit('ADMIN'),
     async (req, res) => {
       try {
-        console.log(req.user.id);
         const users = await User.findAll();
         return res.json(users);
       } catch (e) {
@@ -18,7 +16,7 @@ router
         res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
       }
     })
-  .post('/', // permit('admin'),
+  .post('/', permit('ADMIN'),
     require('../controllers/users.create-user.controller'),
   )
   .get('/search', require('../controllers/users.search.controller'));
@@ -48,7 +46,7 @@ router.get('/:usernameOrId', async (req, res) => {
   }
 });
 
-router.post('/:id', auth, permit('admin'), async (req, res) => {
+router.post('/:id', permit('ADMIN'), async (req, res) => {
   try {
     const id = req.params.id;
 

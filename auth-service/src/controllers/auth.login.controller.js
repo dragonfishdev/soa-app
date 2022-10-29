@@ -1,8 +1,8 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { Credential } = require('../models');
-const { UserService } = require('../api-services');
 const generateToken = require('../utils/generate-tokens');
+const { findUserByUsername } = require('../repositories/users.repository');
 
 module.exports = async (req, res) => {
   try {
@@ -16,12 +16,12 @@ module.exports = async (req, res) => {
 
     const { username, password } = req.body;
 
-    const userRes = await UserService.request(`/api/users/search?username=${username}`);
-    if (userRes.status === 404) {
+    const candidate = await findUserByUsername(username);
+    if (!candidate) {
       return res.status(400).json({ message: 'Неверный логин или пароль' });
     }
 
-    const { id } = userRes.data;
+    const { id } = candidate;
     const user = await Credential.findOne({ where: { userId: id } });
     if (!user) {
       // TODO: Прикрутить возможность восстановления пароля
@@ -35,7 +35,8 @@ module.exports = async (req, res) => {
     const { accessToken, refreshToken } = await generateToken(user);
     return res.json({ accessToken, refreshToken });
   } catch (e) {
-    console.error(e);
-    return res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+    return res.status(500).json({
+      message: e.message || 'Что-то пошло не так, попробуйте снова',
+    });
   }
 };

@@ -9,7 +9,7 @@ async function searchUser(req, res) {
     }
     const candidate = await User.findOne({
       where: { username },
-      attributes: ['id', 'username', 'email', 'fullname'],
+      attributes: ['id', 'username'],
     });
 
     if (!candidate) {

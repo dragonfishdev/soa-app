@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const exludedRoutes = [
-  '/api/auth',
+  '/api/auth/login',
+  '/api/auth/refresh',
 ];
 
 function checkToken(req, res, next) {

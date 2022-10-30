@@ -4,7 +4,7 @@ module.exports = function restreamer(options = {}) {
   opt.stringify = options.stringify || JSON.stringify;
 
   return (req, res, next) => {
-    if (req.method === 'POST') {
+    if (req.method === 'POST' || req.method === 'PUT') {
       req.removeAllListeners('data');
       req.removeAllListeners('end');
       if (req.headers['content-length'] !== undefined) {

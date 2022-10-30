@@ -18,5 +18,15 @@
     "middleware": [
       "check-token"
     ]
+  },
+  {
+    "name": "tasks",
+    "host": "localhost",
+    "port": 5002,
+    "protocol": "http",
+    "rootPath": "api/tasks",
+    "middleware": [
+      "check-token"
+    ]
   }
 ]

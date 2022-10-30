@@ -12,11 +12,11 @@ module.exports = {
     },
     status: {
       type: DataTypes.ENUM('NEW', 'DOING', 'COMPLETED'),
-      allowNull: false,
+      defaultValue: 'NEW',
     },
     archived: {
       type: DataTypes.BOOLEAN,
-      default: "false"
+      defaultValue: false,
     }
   },
 };

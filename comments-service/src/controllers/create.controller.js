@@ -19,6 +19,9 @@ async function createComment(req, res) {
     }
 
     const userId = JSON.parse(req.headers['x-user-data']).id;
+    if (!userId) {
+      req.sendStatus(401);
+    }
   
     const comment = await Comment.create({ taskId, userId, text });
     return res.status(201).json(comment);

@@ -28,5 +28,15 @@
     "middleware": [
       "check-token"
     ]
+  },
+  {
+    "name": "comments",
+    "host": "localhost",
+    "port": 5003,
+    "protocol": "http",
+    "rootPath": "api/comments",
+    "middleware": [
+      "check-token"
+    ]
   }
 ]

@@ -7,9 +7,7 @@ async function findById(req, id) {
   const response = await fetch(
     `${TASK_SERVICE_URL}/api/tasks/${id}`,
     {
-      method: 'GET',
       headers: {
-        'content-type': 'application/json',
         'x-user-data': req.headers['x-user-data'],
       },
     },

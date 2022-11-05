@@ -5,6 +5,7 @@ const { userAuth } = require('../../../utils');
 const router = Router();
 
 router
+  .get('/', userAuth, require('../controllers/find-by-task.controller'))
   .post('/',
     userAuth,
     [

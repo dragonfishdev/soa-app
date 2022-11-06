@@ -54,6 +54,7 @@ export const UsersPage = () => {
         <thead>
           <tr>
             <th>Имя пользователя</th>
+            <th>Полное имя</th>
             <th>Email</th>
             <th>Активная</th>
             <th>Роли</th>
@@ -64,7 +65,8 @@ export const UsersPage = () => {
         <tbody>
           { users.map((user) => (
             <tr key={`user#${user.id}`}>
-              <td>{user.userName}</td>
+              <td>{user.username}</td>
+              <td>{user.fullname || '-'}</td>
               <td>{user.email}</td>
               <td><i className="material-icons">{user.active ? "check" : "cancel"}</i></td>
               <td>

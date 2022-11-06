@@ -5,10 +5,10 @@ import { useMessage } from "../hooks/message.hook"
 
 export const LoginPage = () => {
   const auth = useContext(AuthContext);
-  const {loading, request, error, clearError} = useHttp();
+  const { loading, request, error, clearError } = useHttp();
   const message = useMessage()
   const [form, setForm] = useState({
-    email: '', password: ''
+    username: '', password: ''
   })
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export const LoginPage = () => {
   const loginHandler = async () => {
     try {
       const data = await request('/api/auth/login', 'POST', { ...form })
-      auth.login(data.token, data.user)
+      auth.login(data.accessToken, data.refreshToken)
     } catch (e) {}
   }
 
@@ -41,15 +41,15 @@ export const LoginPage = () => {
             <div>
               <div className="input-field">
                 <input 
-                  placeholder="Введите Email"
-                  id="email"
-                  type="email"
-                  name="email"
+                  placeholder="Введите имя пользователя"
+                  id="username"
+                  type="text"
+                  name="username"
                   className="yellow-input white-text"
                   value={form.email}
                   onChange={changeHandler}
                 />
-                <label htmlFor="email">Email</label>
+                <label htmlFor="username">Имя пользователя</label>
               </div>
 
               <div className="input-field">

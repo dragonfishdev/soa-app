@@ -1,19 +1,17 @@
-const { validationResult } = require('express-validator');
 const { signToken } = require('../utils/sign-token');
 const verifyRefreshToken = require('../utils/verify-refresh-token');
 
 module.exports = async (req, res) => {
   try {
-    const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty()) {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
       res.status(400).json({
-        errors: validationErrors.array(),
         message: 'Не найден токен обновления в теле запроса',
       });
       return;
     }
 
-    const { refreshToken } = req.body;
+    console.log(refreshToken);
     verifyRefreshToken(refreshToken)
       .then(({ tokenDetails }) => {
         const { id, role } = tokenDetails;

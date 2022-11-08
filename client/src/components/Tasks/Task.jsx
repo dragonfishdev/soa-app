@@ -1,12 +1,14 @@
 import './style.css'
 
-export const Task = ({ id, title, description }) => {
+export const Task = ({ id, title, description, onDragStart, }) => {
   return (
-    <div className="task-card">
+    <div className="task-card"
+      onDragStart={onDragStart}
+      draggable>
       <div className="task-card__content">
         <div className="task-card__title">
           <h2>{title}</h2>
-          <div className="task-card__drag-icon"></div>
+          <i className="task-card__drag-icon material-icons">drag_handle</i>
         </div>
         <div className="task-card__body">
           {description}

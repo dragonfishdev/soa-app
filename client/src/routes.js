@@ -7,7 +7,7 @@ export const useRoutes = (isAuthenticated) => {
   if (isAuthenticated) {
     return (
       <Routes>
-        <Route path="/" exact element={ "WIP: tasks" }/>
+        <Route path="/" exact element={ <TasksPage /> }/>
         <Route path="/users" exact element={ <UsersPage /> } />
         <Route path="/archive" exact element={ "WIP: archive" } />
         <Route path="*" element={ <Navigate to="/" /> } />

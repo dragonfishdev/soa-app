@@ -86,11 +86,7 @@ body {
 }
 
 .task-card__drag-icon {
-  padding: 8px;
-  width: 0;
-  height: 0;
-  cursor: pointer;
-  border: 1px solid black;
+  text-decoration: none!important;
 }
 
 .task-card__footer {

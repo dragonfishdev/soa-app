@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useHttp } from "../hooks/http.hook";
 import { Task } from "../components/Tasks/Task";
 import { Loader } from "../components/Loader";
+import { Sidepanel } from "../components/Sidepanel";
+import { useSidepanel } from "../hooks/sidepanel.hook";
+import { TaskForm } from "../components/TaskForm";
 
 const TASKS_TYPE = {
   NEW: {
@@ -29,6 +32,8 @@ export const TasksPage = () => {
   const [tasks, setTasks] = useState({});
   const dragItem = useRef();
   const dragOverItem = useRef();
+
+  const sidepanelProps = useSidepanel({});
  
   const fetchTasks = useCallback(async () => {
     try {
@@ -64,7 +69,12 @@ export const TasksPage = () => {
     dragItem.current = null;
     dragOverItem.current = null;
     setTasks(copyTasks);
-  }, [tasks, request])
+  }, [tasks, request]);
+
+  const push = useCallback((task) => {
+    fetchTasks();
+    sidepanelProps.handleClose()
+  }, [fetchTasks, sidepanelProps])
   
   useEffect(() => {
     fetchTasks();
@@ -75,33 +85,47 @@ export const TasksPage = () => {
   }
   
   return (
-    <div className="tasks-container">
-      {
-        Object.values(tasks).map((type) => (
-          <div
-            key={type.name}
-            className={`task-card-stack task-card-stack_${type.postfix}`}
-            onDragEnter={(e) => dragEnter(e, type)}
-            onDragEnd={drop}>
-              <div className="task-card-stack__title">{type.title}</div>
-              <div className="task-card-stack__wrapper">
-                {
-                  type.items.length
-                    ? type.items.map((task, index) => (
-                    <Task
-                      key={task.id}
-                      id={task.id} 
-                      title={task.title}
-                      description={task.description}
-                      onDragStart={(e) => dragStart(e, type.name, index)} />
-                  ))
-                    : 'Пока нет задач'
-                }
-              </div>
-          </div>  
-        ))
-      }
-    </div>
-      
+    <>
+      <h3 style={{ display: 'flex', alignItems: 'center' }}>
+        <a
+          className="btn-floating blue btn"
+          href="/"
+          style={{ marginRight: '8px' }}
+          onClick={(e) => { e.preventDefault(); sidepanelProps.handleOpen(); }}>
+          <i className="medium material-icons">add</i>
+        </a>
+        Все задачи
+      </h3>
+      <div className="tasks-container">
+        {
+          Object.values(tasks).map((type) => (
+            <div
+              key={type.name}
+              className={`task-card-stack task-card-stack_${type.postfix}`}
+              onDragEnter={(e) => dragEnter(e, type)}
+              onDragEnd={drop}>
+                <div className="task-card-stack__title">{type.title}</div>
+                <div className="task-card-stack__wrapper">
+                  {
+                    type.items.length
+                      ? type.items.map((task, index) => (
+                      <Task
+                        key={task.id}
+                        id={task.id} 
+                        title={task.title}
+                        description={task.description}
+                        onDragStart={(e) => dragStart(e, type.name, index)} />
+                    ))
+                      : 'Пока нет задач'
+                  }
+                </div>
+            </div>  
+          ))
+        }
+      </div>
+      <Sidepanel {...sidepanelProps}>
+        <TaskForm onSuccess={push} />
+      </Sidepanel>
+    </>
   )
 }

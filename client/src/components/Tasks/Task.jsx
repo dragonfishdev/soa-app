@@ -16,7 +16,11 @@ export const Task = ({ id, title, description, onDragStart, }) => {
       </div>
       <div className="task-card__footer">
         <span className="task-card__date-span">07.10.2022 09:16</span>
-        <button className="task-card__comments-button">Комментарии</button>
+        <button
+          className="task-card__comments-button"
+          onClick={() => { window.M.toast({ html: 'Комментарии находятся в разработке' }) }}
+          >Комментарии
+        </button>
       </div>
     </div>
   );

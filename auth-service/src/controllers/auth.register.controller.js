@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const { Credential } = require('../models');
+const { MessageBroker } = require('../utils/publisher');
 const { createUser } = require('../repositories/users.repository');
 
 module.exports = async (req, res) => {
@@ -26,6 +27,15 @@ module.exports = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
     await Credential.create({ userId: user.id, password: hashedPassword });
+
+    const msg = await new MessageBroker().init();
+    await msg.publisher({
+      to: email,
+      subject: 'Регистрация',
+      html: `<h3>Приветствуем в системе MyTasks</h3>
+      <div>Ваш логин - ${username}</div>
+      <div>Ваш пароль - ${password}</div>`,
+    });
 
     return res.status(201).json({
       message: 'Пользователь создан',

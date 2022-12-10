@@ -14,18 +14,12 @@ router.post("/send", async (req, res) => {
       },
     });
 
-    const {
-      to,
-      subject,
-      body: { html },
-    } = req.body;
+    const { to, subject, body: { html }, } = req.body;
 
     // send email
-    await transporter.sendMail({
+    await transporter.sendMail({ 
       from: "kavon.dickinson@ethereal.email",
-      to,
-      subject,
-      html,
+      to, subject, html,
     });
   } catch (e) {
     console.error(e);

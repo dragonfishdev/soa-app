@@ -1,0 +1,83 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq:3.11
+    container_name: rabbitmq
+    ports: 
+      - "5672:5672"
+      - "15672:15672" 
+  mysql-server-80:
+    image: mysql/mysql-server:8.0
+    volumes:
+        - ./docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+        - ./scripts/init.sql:/scripts/init.sql
+    command: --init-file /scripts/init.sql
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: secret
+  # nginx:
+  #   build: './etc/nginx'
+  #   container_name: nginx
+  #   ports:
+  #     - "80:80"
+  #   restart: always
+  #   volumes:
+  #     - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf
+  client:
+    build: './client'
+    ports:
+      - '3000:3000'
+  user-service:
+    build: './user-service'
+    # ports: 
+    #   - "5001:5001"
+    depends_on:
+      - mysql-server-80
+      # - nginx
+    links:
+      - mysql-server-80
+  auth-service:
+    build: './auth-service'
+    # ports: 
+    #   - "5000:5000"
+    depends_on:
+      - mysql-server-80
+      - rabbitmq
+      # - nginx
+    environment:
+      MYSQL_URI: 'mysql://root:secret@localhost:3306/srvc_auth'
+  tasks-service:
+    build: './tasks-service'
+    # ports: 
+    #   - "5002:5002"
+    depends_on:
+      - mysql-server-80
+      # - nginx
+    environment:
+      MYSQL_URI: 'mysql://root:secret@localhost:3306/srvc_tasks'
+  comments-service:
+    build: './comments-service'
+    # ports: 
+    #   - "5003:5003"
+    depends_on:
+      - mysql-server-80
+      # - nginx
+    environment:
+      MYSQL_URI: 'mysql://root:secret@localhost:3306/srvc_comments'
+  mail-service:
+    build: './mail-service'
+    # ports: 
+    #   - "5010:5010"
+    depends_on:
+      - mysql-server-80
+      - rabbitmq
+      # - nginx
+  api-gateway:
+    build: './api-gateway'
+    ports: 
+      - "8080:8080"
+    depends_on:
+      - mysql-server-80
+      # - nginx

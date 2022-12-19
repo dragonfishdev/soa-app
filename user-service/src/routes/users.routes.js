@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { permit } = require('../../../utils');
+const { permit } = require('../utils');
 
 const router = Router();
 

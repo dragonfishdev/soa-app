@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const { Router } = require('express');
-const { userAuth } = require('../../../utils');
+const { userAuth } = require('../utils');
 
 const router = Router();
 
